@@ -1,4 +1,8 @@
 import java.time.Year;
+import java.util.List;
+import java.util.Random;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 //JAVADOC NOS METODOS!!
@@ -8,6 +12,7 @@ import java.util.Scanner;
 public class ListOfExercise3 {
 
 	static Scanner leitor = new Scanner(System.in);
+	static Random gerador = new Random();
 	public static void main(String[] args) {
 	int opcao;
 
@@ -49,13 +54,13 @@ public class ListOfExercise3 {
 
 	case 11 ->{ tax(); }
 
-	case 12 ->{	}
+	case 12 ->{ gerarSerie(14); }
 
-	case 13 ->{	}
+	case 13 ->{ Jogadores.dados();	}
 
-	case 14 ->{	}
+	case 14 ->{ numerosInteiros();	}
 
-	case 15 ->{	}
+	case 15 ->{	numerosAte15(); }
 
 	default -> { System.err.println("Número inválido, digite novamente!"); }
 	}
@@ -223,9 +228,195 @@ public class ListOfExercise3 {
 				}
 			}	
 			}
-			default ->{
-			}
 			}
 		} while(opcao != 4);
 	}	
+	
+    public static void gerarSerie(int numTermos) {
+        int a = 2, b = 7, c = 3;
+        for (int i = 1; i <= numTermos; i++) {
+            if (i % 3 == 1) {
+                System.out.print(a + ", ");
+                a *= 2;
+            } else if (i % 3 == 2) {
+                System.out.print(b + ", ");
+                b *= 3;
+            } else {
+                System.out.print(c + ", ");
+                c *= 4;
+            }
+        }
+    }
+    
+    public static class Jogadores{
+    	String time;
+    	int idade;
+    	double peso;
+    	double altura;
+    	
+		public String getTime() {
+			return time;
+		}
+		public void setTime(String time) {
+			this.time = time;
+		}
+		public int getIdade() {
+			return idade;
+		}
+		public void setIdade(int idade) {
+			this.idade = idade;
+		}
+		public double getPeso() {
+			return peso;
+		}
+		public void setPeso(double peso) {
+			this.peso = peso;
+		}
+		public double getAltura() {
+			return altura;
+		}
+		public void setAltura(double altura) {
+			this.altura = altura;
+		}
+    	
+		@Override
+		public String toString() {
+			return "Jogadores [time=" + time + ", idade=" + idade + ", peso=" + peso + ", altura=" + altura + "]";
+		}
+		
+		public static void dados() {
+    		List<Jogadores> listaDeJogadores = new ArrayList<Jogadores>();
+    		for (int i = 0; i < 5; i++) {
+				for (int j = 0; j < 15; j++) {
+		    		Jogadores jogadores = new Jogadores();
+		    		
+					jogadores.setTime(""+i);
+					jogadores.setIdade(gerador.nextInt(70)+1);
+					jogadores.setPeso(gerador.nextDouble(50.0)+50.0);
+					jogadores.setAltura(gerador.nextDouble(0.99)+1);
+					listaDeJogadores.add(jogadores);
+				}
+    		}
+    		
+    		analise(listaDeJogadores);	
+    	
+		}
+		
+		public static void analise(List<Jogadores> jogadores) {
+			System.out.printf("""
+					Jogadores menores de idade: %d
+					Média de idades por time: %s
+					Média de altura dos jogadores: %.2f cm
+					Percentual de jogadores acima de 80kg: %.1f%s
+							""",contarMenores(jogadores),calcularMediaPorTime(jogadores),calcularMediaAltura(jogadores),calcularPercentualMais80Kg(jogadores),"%");
+		}
+		
+		public static int contarMenores(List<Jogadores> jogadores) {
+			int quantidadeJogadores = 0;
+			for (Jogadores jogador : jogadores) {
+				if (jogador.getIdade() < 18) {
+					quantidadeJogadores++;
+				}
+			}
+			return quantidadeJogadores;
+		}
+		
+		public static String calcularMediaPorTime(List<Jogadores> jogadores) {
+			double[] somaIdadesPorTime = new double[5];
+			int[] contadorPorTime = new int[5];
+			
+			for (Jogadores jogador : jogadores) {
+			    int index = Integer.parseInt(jogador.getTime());
+			    somaIdadesPorTime[index] += jogador.getIdade();
+			    contadorPorTime[index]++;
+			}
+			
+			double[] mediaPorTime = new double[5];
+			for (int i = 0; i < 5; i++) {
+			    mediaPorTime[i] = somaIdadesPorTime[i] / contadorPorTime[i];
+			}
+			
+			String mediaPorTimeTexto = String.format("\nTime 1: %.0f\nTime 2: %.0f\nTime 3: %.0f\nTime 4: %.0f\nTime 5: %.0f",
+                    mediaPorTime[0], mediaPorTime[1], mediaPorTime[2], mediaPorTime[3], mediaPorTime[4]);
+			return mediaPorTimeTexto;
+		}
+		
+		public static double calcularMediaAltura(List<Jogadores> jogadores) {
+	        double somaAlturas = 0;
+	        for (Jogadores jogador : jogadores) {
+	            somaAlturas += jogador.getAltura();
+	        }
+	        return somaAlturas / jogadores.size();
+		}
+		
+	    public static double calcularPercentualMais80Kg(List<Jogadores> jogadores) {
+	        int quantidadeJogadores = 0;
+	        for (Jogadores jogador : jogadores) {
+	            if (jogador.getPeso() > 80) {
+	            	quantidadeJogadores++;
+	            }
+	        }
+	        return ((double) quantidadeJogadores / jogadores.size()) * 100;
+	    }
+		
+    }
+    
+    public static void numerosInteiros() {
+    	System.out.println("Insira somente números inteiros positivos ou negativo para sair.");
+    	int numero = 0;
+        ArrayList<Integer> listaNumeros = new ArrayList<Integer>();
+    	do {
+    		numero = leitor.nextInt();
+    		if (numero >= 0) {
+    			listaNumeros.add(numero);
+    		}
+    	}while(numero >= 0);
+    	Collections.sort(listaNumeros);
+    	
+    	System.out.printf("\nMaior número informado: %d \nMenor número informado: %d",
+    			listaNumeros.get(listaNumeros.size() - 1), listaNumeros.get(0));
+    }
+    
+    public static void numerosAte15() {
+    	System.out.println("Insira 15 números");
+    	double entrada = 0;
+    	ArrayList<Double> listaNumeros = new ArrayList<Double>();
+    	
+    	for (int i = 0; i < 15; i++) {
+    		entrada = leitor.nextDouble();
+    		
+    		listaNumeros.add(entrada);
+    	}
+    	
+    	Collections.sort(listaNumeros);
+    	
+    	double menorNumero = listaNumeros.get(0);
+    	
+    	double maiorNumero = listaNumeros.get(listaNumeros.size() - 1);
+    	
+    	double soma = 0;
+        for (double numero : listaNumeros) {
+            soma += numero;
+        }
+        double mediaNumeros = soma / listaNumeros.size();
+    	
+        int contPares = 0;
+        int contDiv5 = 0;
+        for (double numero : listaNumeros) {
+            if (numero % 2 == 0) {
+                contPares++;
+            }
+            if (numero % 5 == 0) {
+                contDiv5++;
+            }
+        }
+        
+    	System.out.printf("""
+    			Menor número: 			%.1f
+    			Maior número: 			%.1f
+    			Média dos números: 		%.2f
+    			Quantidade de pares: 		%d
+    			Quantidade divisíveis por 5: 	%d
+    				""",menorNumero,maiorNumero,mediaNumeros,contPares,contDiv5);
+    }
 }
