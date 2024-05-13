@@ -43,11 +43,11 @@ public class ListOfExercise3 {
 		System.out.println("Quantidade de meses para o capital de João ultrapassar Carlos: " + numberMonths(salario));
 	}
 
-	case 9 ->{ }
+	case 9 ->{ numberSign(); }
 
-	case 10 ->{ }
+	case 10 ->{ System.out.println(studentGrading()); }
 
-	case 11 ->{ }
+	case 11 ->{ tax(); }
 
 	case 12 ->{	}
 
@@ -145,4 +145,87 @@ public class ListOfExercise3 {
 			}
 		return mounth;
 	}
+	
+	public static void numberSign() {
+		int quantidadeNegativo = 0;
+		int SomaPositivo = 0;
+		int numero = 1;
+		System.out.println("Insira números inteiros ou 0 para parar.");
+		while (numero != 0) {
+			numero = leitor.nextInt();
+			
+			if(numero > 0) {
+				SomaPositivo += numero;
+			}
+			
+			if (numero < 0) {
+				quantidadeNegativo++;
+			}
+		}
+		System.out.printf("Soma dos números positivos: %d\nQuantidade de números negativos: %d",SomaPositivo,quantidadeNegativo);
+	}
+	
+	public static String studentGrading() {
+		String classificacao;
+		double nota = 0;
+		System.out.println("Insira sua nota:");
+		do {
+			nota = leitor.nextDouble();
+			if (nota < 0 || nota > 10) {
+				System.err.println("Valor inválido! Digite novamente.");
+			}
+		} while(nota < 0 || nota > 10);
+		classificacao = nota < 5 ? "Reporvado!" : nota >= 5 && nota < 6 ?"Recuperação!" : "Aprovado!";
+		return classificacao;
+	}
+	
+	public static void tax() {
+		int opcao = 0;
+		String menu = """
+				---- Menu de Opções ----
+				1. Imposto
+				2. Novo salário
+				3. Classificação
+				4. Finalizar o programa
+				Digite a opção desejada
+				------------------------
+					""";
+		
+	    do {
+	        System.out.println(menu);
+	        opcao = leitor.nextInt();
+	        if (opcao < 1 || opcao > 4) {
+	            System.err.println("Valor inválido!");
+	            continue;
+	        }
+			
+			switch (opcao) {
+			case 1, 2, 3 ->{
+				double salario = 0;
+				System.out.println("Insira um salário");
+				salario = leitor.nextDouble();
+				
+				switch (opcao) {
+				case 1 ->{
+					double imposto = 0.0;
+					imposto = salario <= 1500.00 ? salario * 0.05 : salario <= 3000.00 ? salario * 0.10 : salario * 0.15; 
+					System.out.printf("O valor de imposto de acordo com as regras é R$%.2f\n",imposto);
+				}
+				case 2 ->{
+					double novoSalario = 0.0;
+					novoSalario = salario < 2000.01 ? salario + 130.0 : salario < 3000.00 ? salario + 150.0 : salario <= 4500.00 ? salario + 200.00 : salario + 250.00;
+					System.out.printf("Seu novo salário é R$%.2f\n",novoSalario);
+				}
+				case 3 ->{
+					String classificacao = "";
+					classificacao = salario <= 3000.00 ? "Mal remunerado!" : "Bem remunerado!";
+					System.out.printf("Sua classificação é: %s\n",classificacao);
+				}
+			}	
+			}
+			default ->{
+			}
+			}
+		} while(opcao != 4);
+	}	
 }
